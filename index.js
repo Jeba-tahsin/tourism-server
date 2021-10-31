@@ -65,6 +65,15 @@ async function run() {
         res.send(purches);
     })
 
+    app.get("/orderEmail", (req, res) => {
+        purchesCollection
+            .find({ email: req.query.email })
+            .toArray((err, documents) => {
+                res.send(documents);
+            });
+    });
+
+
     }
     finally{
 
