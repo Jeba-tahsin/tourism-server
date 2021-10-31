@@ -21,6 +21,7 @@ async function run() {
        await client.connect();
        const database = client.db('tourism');
        const serviceCollection = database.collection('details');
+       const purchesCollection = database.collection('purches');
 
        //get api
        app.get('/details', async(req, res)=>{
@@ -29,7 +30,7 @@ async function run() {
            res.send(details);
        })
 
-       //single service
+       //single service api
        app.get('/details/:id', async(req, res)=>{
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
@@ -44,8 +45,26 @@ async function run() {
 
         const result = await serviceCollection.insertOne(details);
         console.log(result);
-        res.send(result)
+        res.send(result);
        });
+
+      //purches post api
+      app.post('/purches', async(req, res)=> {
+        const purches = req.body;
+        console.log('hit the post', purches);
+
+        const result = await purchesCollection.insertOne(purches);
+        console.log(result);
+        res.json(result);
+       });
+
+      // purches get api
+      app.get('/purches', async(req, res)=>{
+        const cursor = purchesCollection.find({})
+        const purches = await cursor.toArray();
+        res.send(purches);
+    })
+
     }
     finally{
 
