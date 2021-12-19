@@ -24,6 +24,7 @@ async function run() {
     const database = client.db("tourism");
     const serviceCollection = database.collection("details");
     const purchesCollection = database.collection("purches");
+    const reviewCollection = database.collection("reviews");
 
     //get api
     app.get("/details", async (req, res) => {
@@ -75,6 +76,21 @@ async function run() {
         });
     });
 
+    //Review POST API
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+
+      const result = await reviewCollection.insertOne(review);
+      // console.log(result);
+      res.json(result);
+    });
+
+    //Review Get API
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewCollection.find({});
+      const review = await cursor.toArray();
+      res.send(review);
+    });
     // delete api
     app.delete("/deletePurches/:id", async (req, res) => {
       const id = req.params.id;
